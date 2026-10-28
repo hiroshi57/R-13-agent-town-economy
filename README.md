@@ -3,16 +3,17 @@
 **元論文**: Regmi, Pudasaini, Pun (Karela Technologies Inc.), *"But How Would AI Agents Run a Town's Economy?"*
 arXiv:[2609.11108](https://arxiv.org/abs/2609.11108) [cs.MA], 2026.
 
-[![tests](https://github.com/hiroshi57/agent-town-economy/actions/workflows/ci.yml/badge.svg)](https://github.com/hiroshi57/agent-town-economy/actions/workflows/ci.yml)
+[![tests](https://github.com/hiroshi57/R-13-agent-town-economy/actions/workflows/ci.yml/badge.svg)](https://github.com/hiroshi57/R-13-agent-town-economy/actions/workflows/ci.yml)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![arXiv](https://img.shields.io/badge/arXiv-2609.11108-b31b1b.svg)](https://arxiv.org/abs/2609.11108)
-[![dashboard](https://img.shields.io/badge/dashboard-live-5b9dff.svg)](https://hiroshi57.github.io/agent-town-economy/)
+[![dashboard](https://img.shields.io/badge/dashboard-live-5b9dff.svg)](https://hiroshi57.github.io/R-13-agent-town-economy/)
 
-> 🔗 **ライブダッシュボード**: **https://hiroshi57.github.io/agent-town-economy/**
+> 🔗 **ライブダッシュボード**: **https://hiroshi57.github.io/R-13-agent-town-economy/**
 > — 多面評価・時系列・将来予測・実LLM/記憶表現実験の可視化（依存なしの単一HTML）
+> （GitHub Pages 有効化が前提。非公開リポジトリでの Pages 公開は有料プランが必要）
 
-[![ダッシュボード](assets/dashboard.png)](https://hiroshi57.github.io/agent-town-economy/)
+[![ダッシュボード](assets/dashboard.png)](https://hiroshi57.github.io/R-13-agent-town-economy/)
 
 論文の**シミュレーションプラットフォーム本体は非公開**（公開されているのは生データのみ）。
 本リポジトリは、論文の記述からプラットフォームを**動作する形で再現**したもの。実LLMやAPIキーが
