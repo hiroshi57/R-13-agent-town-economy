@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AIに町の経済を任せたら？ — やさしい版</title>
+<style>
+:root{--bg:#0f1420;--card:#171d2e;--card2:#1e2640;--ink:#eef2fb;--muted:#9aa6c2;--line:#2b3450;
+--blue:#5b9dff;--green:#39d98a;--amber:#ffb020;--red:#ff5c7a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.7;
+font-family:"Segoe UI",system-ui,"Hiragino Kaku Gothic ProN",Meiryo,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:28px 20px 60px}
+h1{font-size:24px;margin:0 0 6px}
+.lead{color:var(--muted);font-size:14px;margin:0 0 22px}
+.summary{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-bottom:26px}
+.summary h2{font-size:15px;margin:0 0 14px;color:var(--blue);letter-spacing:.02em}
+.pt{display:flex;gap:12px;align-items:flex-start;margin:12px 0}
+.pt .n{flex:0 0 28px;height:28px;border-radius:50%;background:var(--card2);color:var(--blue);
+font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px}
+.pt .t{font-size:15.5px}
+.pt .t b{color:#fff}
+.sec{font-size:12px;color:var(--muted);letter-spacing:.12em;margin:28px 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-bottom:16px}
+.card .q{font-size:16px;font-weight:700;margin:0 0 10px}
+.row{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:6px 0 10px}
+.big{font-size:34px;font-weight:800;line-height:1}
+.big .u{font-size:16px;font-weight:600;color:var(--muted);margin-left:4px}
+.pill{font-size:12px;font-weight:700;padding:3px 11px;border-radius:999px}
+.pill.warn{background:rgba(255,176,32,.15);color:var(--amber)}
+.pill.good{background:rgba(57,217,138,.15);color:var(--green)}
+.exp{font-size:15px;margin:4px 0 0}
+.jargon{font-size:12.5px;color:var(--muted);margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}
+.jargon b{color:#c7d0e6}
+.foot{color:var(--muted);font-size:12px;margin-top:24px}
+.toggle{display:inline-block;margin-top:10px;color:var(--blue);font-size:13px;text-decoration:none}
+</style></head>
+<body><div class="wrap">
+
+<h1>AIに町の経済を任せたら、どうなる？</h1>
+<p class="lead">100体のAIに、実在の町（ネパール・ポカラ）でお店や仕事を2週間まわしてもらった研究の結果を、やさしくまとめました。</p>
+
+<div class="summary">
+  <h2>ひとことで言うと</h2>
+  <div class="pt"><div class="n">1</div><div class="t"><b>お金はお店で止まる。</b> お客が増えてお店は儲かるのに、その儲けが働く人の<b>給料</b>や商品の<b>値段</b>には回りませんでした。</div></div>
+  <div class="pt"><div class="n">2</div><div class="t"><b>配ったお金も使われない。</b> 現金を配っても、AIはほとんど使わず貯め込みました（人間なら2〜5割使うところ、AIは3〜4%）。</div></div>
+  <div class="pt"><div class="n">3</div><div class="t"><b>「記憶の持たせ方」で変わる。</b> AIに“つながりで思い出せる記憶”を持たせると、値段や給料を動かし始めました（改善の糸口）。</div></div>
+</div>
+
+<div class="sec">みつかったこと（3つ）</div>
+
+<div class="card">
+  <p class="q">① お客が増えても、給料は増えない</p>
+  <div class="row"><div class="big">4.6<span class="u">倍</span></div><span style="color:var(--muted)">お店の売上</span>
+    <div class="big" style="color:var(--amber)">1.03<span class="u">倍</span></div><span style="color:var(--muted)">働く人の給料</span>
+    <span class="pill warn">注意ポイント</span></div>
+  <p class="exp">お客（観光客）を12倍に増やすと、お店の売上は4.6倍になりました。でも、そこで働く人の給料はほぼ横ばい（1.03倍＝ほとんど変わらない）。<b>儲けがオーナーに溜まり、現場に回らない</b>状態です。</p>
+  <p class="jargon">むずかしい言葉では… <b>「伝播（でんぱ）の失敗」</b>：景気の良さが給料・物価まで伝わらないこと。</p>
+</div>
+
+<div class="card">
+  <p class="q">② もらったお金を、ほとんど使わない</p>
+  <div class="row"><div class="big" style="color:var(--amber)">3〜4<span class="u">%</span></div><span style="color:var(--muted)">AIが使った割合</span>
+    <div class="big" style="color:var(--green)">20〜50<span class="u">%</span></div><span style="color:var(--muted)">人間なら</span>
+    <span class="pill warn">注意ポイント</span></div>
+  <p class="exp">「臨時ボーナス」としてAIに現金を配ってみました。人間なら受け取った額の2〜5割を使いますが、<b>AIは3〜4%しか使わず、ほぼ貯金</b>。お金が動かないので、町全体も活気づきませんでした。</p>
+  <p class="jargon">むずかしい言葉では… <b>「MPC（限界消費性向）」</b>：もらったお金のうち使う割合。</p>
+</div>
+
+<div class="card">
+  <p class="q">③ 記憶の“持たせ方”を変えると、動き出す</p>
+  <div class="row"><div class="big" style="color:var(--muted)">0<span class="u">回</span></div><span style="color:var(--muted)">ふつうの記憶</span>
+    <div class="big" style="color:var(--green)">数百<span class="u">回</span></div><span style="color:var(--muted)">つながる記憶</span>
+    <span class="pill good">改善できた</span></div>
+  <p class="exp">AIに「売り切れ→給料を上げる→みんなが使う→もっと売れる」という<b>つながりで思い出せる記憶</b>を持たせたら、今まで0回だった値段・給料の見直しを何百回も行い、お金の使われ方も約3.4倍に。<b>AIの“賢さ”より“記憶の設計”が効く</b>と分かりました。</p>
+  <p class="jargon">むずかしい言葉では… <b>「LLM-Wiki記憶」</b>：知識を“つながり”として持たせる新しい記憶の形（WFM論文）。</p>
+</div>
+
+<p class="foot">※ これは「やさしい版」のサンプルです。数字は実際の実験結果にもとづきます。くわしい専門版（グラフつき）は
+<a class="toggle" href="./index.html">こちらの詳細ダッシュボード →</a></p>
+
+</div></body></html>
