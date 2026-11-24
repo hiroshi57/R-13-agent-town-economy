@@ -5,6 +5,7 @@ World clock: fixed 60-simulated-minute pulses at which scheduled dynamics
 Agent clock: within each pulse every agent wakes, reasons (via the policy),
 and acts once -- a staggered stream rather than lockstep rounds.
 """
+
 from __future__ import annotations
 
 import math
@@ -24,12 +25,14 @@ class RunResult:
     condition: str
     seed: int
     pulses: int
-    panel: List[Dict[str, int]] = field(default_factory=list)          # per pulse x agent
+    panel: List[Dict[str, int]] = field(default_factory=list)  # per pulse x agent
     tool_stats: Dict[str, Dict[str, int]] = field(default_factory=dict)
     place_summary: List[Dict[str, int]] = field(default_factory=list)
     treated_ids: List[int] = field(default_factory=list)
     grant_pulse: Optional[int] = None
     ledger_entries: List[Dict[str, object]] = field(default_factory=list)
+    wages_paid_ok: int = 0  # wage transfers that actually went through
+    wages_failed: int = 0  # wage transfers refused (business out of cash)
 
 
 class Simulation:
@@ -57,6 +60,8 @@ class Simulation:
         self.agents: List[Agent] = []
         self.tool_stats: Dict[str, Dict[str, int]] = {}
         self.treated_ids: List[int] = []
+        self.wages_paid_ok = 0
+        self.wages_failed = 0
 
         self._init_agents(memory_enabled)
         self._seed_money()
@@ -66,7 +71,11 @@ class Simulation:
         priced = self.world.priced_places()
         for aid in range(self.n_agents):
             spot = self.rng.choice(priced) if priced else None
-            mem = self.memory_factory() if self.memory_factory is not None else Memory(enabled=memory_enabled)
+            mem = (
+                self.memory_factory()
+                if self.memory_factory is not None
+                else Memory(enabled=memory_enabled)
+            )
             agent = Agent(
                 agent_id=aid,
                 x=spot.x if spot else 0.0,
@@ -88,7 +97,9 @@ class Simulation:
             wealth = max(2000, wealth)
             self.ledger.seed(money.agent_wallet(agent.agent_id), wealth)
         for place in self.world.priced_places():
-            self.ledger.seed(money.biz_cash(place.place_id), self.rng.randint(1000, 5000))
+            self.ledger.seed(
+                money.biz_cash(place.place_id), self.rng.randint(1000, 5000)
+            )
 
     # -- pulse dynamics ---------------------------------------------------
     def _resolve_tourists(self) -> None:
@@ -101,7 +112,11 @@ class Simulation:
             if item is None:
                 continue
             ok = self.ledger.transfer(
-                self.pulse, "tourist_inflow_pool", money.biz_cash(place.place_id), item.price, "tourist_spend"
+                self.pulse,
+                "tourist_inflow_pool",
+                money.biz_cash(place.place_id),
+                item.price,
+                "tourist_spend",
             )
             if ok:
                 place.revenue += item.price
@@ -113,7 +128,9 @@ class Simulation:
             return
         recipients = self.rng.sample(range(self.n_agents), g.n_recipients)
         for aid in recipients:
-            self.ledger.transfer(self.pulse, "government", money.agent_wallet(aid), g.amount, "grant")
+            self.ledger.transfer(
+                self.pulse, "government", money.agent_wallet(aid), g.amount, "grant"
+            )
             self.agents[aid].treated = True
             self.treated_ids.append(aid)
 
@@ -128,10 +145,17 @@ class Simulation:
         for place_id, workers in on_shift.items():
             place = self.world.places[place_id]
             for w in workers:
-                self.ledger.transfer(
-                    self.pulse, money.biz_cash(place_id), money.agent_wallet(w.agent_id),
-                    place.wage_per_shift, "wage",
+                ok = self.ledger.transfer(
+                    self.pulse,
+                    money.biz_cash(place_id),
+                    money.agent_wallet(w.agent_id),
+                    place.wage_per_shift,
+                    "wage",
                 )
+                if ok:
+                    self.wages_paid_ok += 1
+                else:
+                    self.wages_failed += 1
 
     def _record_tool(self, name: str, ok: bool) -> None:
         s = self.tool_stats.setdefault(name, {"calls": 0, "failures": 0})
@@ -170,11 +194,19 @@ class Simulation:
                     wallet = self.ledger.balance(money.agent_wallet(a.agent_id))
                     bank = self.ledger.balance(money.agent_bank(a.agent_id))
                     result.panel.append(
-                        {"pulse": p, "agent_id": a.agent_id, "wallet": wallet, "bank": bank, "wealth": wallet + bank}
+                        {
+                            "pulse": p,
+                            "agent_id": a.agent_id,
+                            "wallet": wallet,
+                            "bank": bank,
+                            "wealth": wallet + bank,
+                        }
                     )
 
         result.tool_stats = self.tool_stats
         result.treated_ids = self.treated_ids
+        result.wages_paid_ok = self.wages_paid_ok
+        result.wages_failed = self.wages_failed
         result.ledger_entries = [e.as_row() for e in self.ledger.entries]
         for place in self.world.priced_places():
             result.place_summary.append(

@@ -16,6 +16,7 @@ observation, calls the backend, parses+validates the returned tool name, and
 falls back to the heuristic on any malformed output -- so a bad generation is
 forfeited, never fatal (paper section 5).
 """
+
 from __future__ import annotations
 
 import json
@@ -111,15 +112,40 @@ class WikiPolicy:
     is therefore the single variable between the two arms.
     """
 
-    def __init__(self, rng: random.Random, act_prob: float = 0.35,
-                 spend_prob: float = 0.5, high_demand_rate: float = 3.0,
-                 base_mpc: float = 0.035) -> None:
+    def __init__(
+        self,
+        rng: random.Random,
+        act_prob: float = 0.35,
+        spend_prob: float = 0.5,
+        high_demand_rate: float = 3.0,
+        base_mpc: float = 0.035,
+        afford_gate: bool = False,
+        cash_buffer: int = 4,
+    ) -> None:
         self.rng = rng
         self.act_prob = act_prob
         self.spend_prob = spend_prob
         self.high_demand_rate = high_demand_rate
         self.base_mpc = base_mpc
+        # afford_gate: only raise the wage "at the right time" -- when the
+        # business can actually cover it and the wage is not already above what
+        # each sale brings in. Blindly raising (gate off) makes payments fail.
+        self.afford_gate = afford_gate
+        self.cash_buffer = cash_buffer
         self._last_wallet: Dict[int, int] = {}
+
+    def _can_afford_raise(self, agent: Agent, sim) -> bool:
+        place = sim.world.places.get(agent.owns_business)
+        if place is None:
+            return False
+        cash = sim.ledger.balance(money.biz_cash(place.place_id))
+        if cash < place.wage_per_shift * self.cash_buffer:
+            return False  # not enough cash to keep paying after a raise
+        if place.n_transactions > 0:
+            avg_take = place.revenue / place.n_transactions
+            if place.wage_per_shift > avg_take:
+                return False  # wage already exceeds per-sale revenue -> over-raised
+        return True
 
     def _situation(self, agent: Agent, sim) -> set:
         s = set()
@@ -147,7 +173,8 @@ class WikiPolicy:
                 actions = mem.retrieve_actions(list(situation))
         owner = agent.owns_business is not None
         if owner and "raise_wage" in actions and self.rng.random() < self.act_prob:
-            return ("set_wage", {})
+            if (not self.afford_gate) or self._can_afford_raise(agent, sim):
+                return ("set_wage", {})
         if owner and "raise_price" in actions and self.rng.random() < self.act_prob:
             return ("set_price", {})
         if "buy_food" in actions and self.rng.random() < self.spend_prob:
@@ -189,5 +216,7 @@ class LLMPolicy:
             if self.fallback is not None:
                 return self.fallback.choose(agent, sim)
             return ("observe_place", {})
-        kwargs: Dict[str, object] = {"text": "pulse-note"} if name == "write_memory" else {}
+        kwargs: Dict[str, object] = (
+            {"text": "pulse-note"} if name == "write_memory" else {}
+        )
         return (name, kwargs)

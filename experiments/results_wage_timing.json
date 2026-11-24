@@ -1,0 +1,48 @@
+[
+  {
+    "mode": "闇雲(no-gate)",
+    "condition": "tourism-high",
+    "validated": true,
+    "set_wage_calls": 2303,
+    "wages_paid_ok": 583,
+    "wages_failed": 11161,
+    "wage_fail_rate": 0.95,
+    "wage_share": 0.4752,
+    "gini": 0.3441
+  },
+  {
+    "mode": "適切な時だけ(gate)",
+    "condition": "tourism-high",
+    "validated": true,
+    "set_wage_calls": 178,
+    "wages_paid_ok": 719,
+    "wages_failed": 11079,
+    "wage_fail_rate": 0.939,
+    "wage_share": 0.5235,
+    "gini": 0.3468
+  },
+  {
+    "mode": "闇雲(no-gate)",
+    "condition": "wealth-grant",
+    "validated": true,
+    "set_wage_calls": 1185,
+    "wages_paid_ok": 696,
+    "wages_failed": 11192,
+    "wage_fail_rate": 0.941,
+    "wage_share": 0.9819,
+    "gini": 0.329,
+    "mpc": 0.1077
+  },
+  {
+    "mode": "適切な時だけ(gate)",
+    "condition": "wealth-grant",
+    "validated": true,
+    "set_wage_calls": 4,
+    "wages_paid_ok": 812,
+    "wages_failed": 11076,
+    "wage_fail_rate": 0.932,
+    "wage_share": 1.041,
+    "gini": 0.3306,
+    "mpc": -0.1029
+  }
+]
